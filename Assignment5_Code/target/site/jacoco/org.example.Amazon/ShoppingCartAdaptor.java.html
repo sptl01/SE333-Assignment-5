@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ShoppingCartAdaptor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Assignment5_code</a> &gt; <a href="index.source.html" class="el_package">org.example.Amazon</a> &gt; <span class="el_source">ShoppingCartAdaptor.java</span></div><h1>ShoppingCartAdaptor.java</h1><pre class="source lang-java linenums">package org.example.Amazon;
+
+import org.example.Amazon.Cost.ItemType;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+// Class responsible for querying and saving invoices in the database
+public class ShoppingCartAdaptor implements ShoppingCart {
+
+    private Database connection;  // Represents the database connection object
+
+    // Constructor that initializes the database connection using dependency injection
+<span class="nc" id="L15">    public ShoppingCartAdaptor(Database connection) {</span>
+<span class="nc" id="L16">        this.connection = connection;</span>
+<span class="nc" id="L17">    }</span>
+
+    @Override
+    public void add(Item item) {
+<span class="nc" id="L21">        connection.withSql(() -&gt; {  // Executes SQL operations within the database connection</span>
+<span class="nc" id="L22">            try (var ps = connection.getConnection().prepareStatement(&quot;insert into shoppingcart (name, type, quantity, priceperunit) values (?,?,?,?)&quot;)) {  // Prepares the SQL query to insert a new invoice</span>
+<span class="nc" id="L23">                ps.setString(1, item.getName());  // Sets the customer name in the query</span>
+<span class="nc" id="L24">                ps.setString(2, item.getType().name());  // Sets the invoice value in the query</span>
+<span class="nc" id="L25">                ps.setInt(3, item.getQuantity());  // Sets the invoice value in the query</span>
+<span class="nc" id="L26">                ps.setDouble(4, item.getPricePerUnit());  // Sets the invoice value in the query</span>
+<span class="nc" id="L27">                ps.execute();  // Executes the insert query</span>
+
+<span class="nc" id="L29">                connection.getConnection().commit();  // Commits the transaction to make the changes permanent</span>
+            }
+<span class="nc" id="L31">            return null;  // Returns null as this operation does not need to return any value</span>
+        });
+<span class="nc" id="L33">    }</span>
+
+    @Override
+    public List&lt;Item&gt; getItems() {
+<span class="nc" id="L37">        return connection.withSql(() -&gt; {  // Executes SQL operations within the database connection</span>
+<span class="nc" id="L38">            try (var ps = connection.getConnection().prepareStatement(&quot;select * from shoppingcart&quot;)) {  // Prepares the SQL query to select all invoices</span>
+<span class="nc" id="L39">                final var rs = ps.executeQuery();  // Executes the query and stores the result set</span>
+
+<span class="nc" id="L41">                List&lt;Item&gt; ShoppingCart = new ArrayList&lt;&gt;();  // Creates a list to store all retrieved invoices</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">                while (rs.next()) {  // Iterates through each row in the result set</span>
+<span class="nc" id="L43">                    ShoppingCart.add(new Item(ItemType.valueOf(rs.getString(&quot;type&quot;)),rs.getString(&quot;name&quot;),</span>
+<span class="nc" id="L44">                            rs.getInt(&quot;quantity&quot;),rs.getDouble(&quot;priceperunit&quot;)));  // Creates a new Invoice object and adds it to the list</span>
+                }
+
+<span class="nc" id="L47">                return ShoppingCart;  //  Returns the list of all invoices</span>
+            }
+        });
+    }
+
+    @Override
+    public int numberOfItems() {
+<span class="nc" id="L54">        return connection.withSql(() -&gt; {</span>
+<span class="nc" id="L55">            try(var ps = connection.getConnection().prepareStatement(&quot;select count(*) from shoppingcart&quot;)){</span>
+<span class="nc" id="L56">                return ps.getFetchSize();</span>
+            }
+        });
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

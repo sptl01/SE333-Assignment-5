@@ -1,0 +1,16 @@
+org\example\Amazon\Cost\RegularCost.class
+org\example\Amazon\Item.class
+org\example\Barnes\PurchaseSummary.class
+org\example\Amazon\Cost\ItemType.class
+org\example\Barnes\BookDatabase.class
+org\example\Amazon\Cost\DeliveryPrice.class
+org\example\Amazon\ShoppingCartAdaptor.class
+org\example\Amazon\Database$SqlSupplier.class
+org\example\Barnes\BuyBookProcess.class
+org\example\Amazon\Cost\PriceRule.class
+org\example\Barnes\BarnesAndNoble.class
+org\example\Amazon\ShoppingCart.class
+org\example\Amazon\Amazon.class
+org\example\Amazon\Cost\ExtraCostForElectronics.class
+org\example\Barnes\Book.class
+org\example\Amazon\Database.class

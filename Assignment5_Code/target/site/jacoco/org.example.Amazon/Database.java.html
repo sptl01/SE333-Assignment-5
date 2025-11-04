@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Database.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Assignment5_code</a> &gt; <a href="index.source.html" class="el_package">org.example.Amazon</a> &gt; <span class="el_source">Database.java</span></div><h1>Database.java</h1><pre class="source lang-java linenums">package org.example.Amazon;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+/**
+ * This is a very naive database connection class.
+ * In real life, you should make use of a decent database API,
+ * such as Spring Data or Hibernate.
+ */
+public class Database {
+
+    private static Connection connection;
+
+<span class="nc" id="L16">    public Database() {</span>
+<span class="nc bnc" id="L17" title="All 2 branches missed.">        if(connection !=null) return;</span>
+
+<span class="nc" id="L19">        withSql(() -&gt; {</span>
+<span class="nc" id="L20">            connection = DriverManager.getConnection(&quot;jdbc:hsqldb:mem:mymemdb.db&quot;, &quot;SA&quot;, &quot;&quot;);</span>
+<span class="nc" id="L21">            try (var preparedStatement = connection.prepareStatement(&quot;create table if not exists shoppingcart (type varchar(100), name varchar(100), &quot; +</span>
+                    &quot; quantity int, priceperunit double)&quot;)) {
+<span class="nc" id="L23">                preparedStatement.execute();</span>
+<span class="nc" id="L24">                connection.commit();</span>
+            }
+<span class="nc" id="L26">            return null;</span>
+        });
+<span class="nc" id="L28">    }</span>
+
+    public Connection getConnection() {
+<span class="nc" id="L31">        return connection;</span>
+    }
+
+    public void resetDatabase() {
+<span class="nc" id="L35">        withSql(() -&gt; {</span>
+<span class="nc" id="L36">            connection = DriverManager.getConnection(&quot;jdbc:hsqldb:mem:mymemdb.db&quot;, &quot;SA&quot;, &quot;&quot;);</span>
+<span class="nc" id="L37">            try (var preparedStatement = connection.prepareStatement(&quot;delete from shoppingcart&quot;)) {</span>
+<span class="nc" id="L38">                preparedStatement.execute();</span>
+<span class="nc" id="L39">                connection.commit();</span>
+            }
+<span class="nc" id="L41">            return null;</span>
+        });
+<span class="nc" id="L43">    }</span>
+
+    public interface SqlSupplier&lt;T&gt; {
+        T doSql() throws SQLException;
+    }
+    public &lt;T&gt; T withSql(SqlSupplier&lt;T&gt; sqlSupplier) {
+        try {
+<span class="nc" id="L50">            return sqlSupplier.doSql();</span>
+<span class="nc" id="L51">        } catch (SQLException e) {</span>
+<span class="nc" id="L52">            throw new RuntimeException(e);</span>
+        }
+    }
+
+    public void close() {
+<span class="nc" id="L57">        withSql( () -&gt; {</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">            if (connection != null) {</span>
+<span class="nc" id="L59">                connection.close();</span>
+            }
+<span class="nc" id="L61">            return null;</span>
+        });
+<span class="nc" id="L63">        connection = null;</span>
+<span class="nc" id="L64">    }</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

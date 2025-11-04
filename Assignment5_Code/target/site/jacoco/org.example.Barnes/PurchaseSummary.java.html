@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PurchaseSummary.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Assignment5_code</a> &gt; <a href="index.source.html" class="el_package">org.example.Barnes</a> &gt; <span class="el_source">PurchaseSummary.java</span></div><h1>PurchaseSummary.java</h1><pre class="source lang-java linenums">package org.example.Barnes;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+public class PurchaseSummary {
+    private int totalPrice;
+    private Map&lt;Book, Integer&gt; unavailable;
+
+<span class="fc" id="L11">    public PurchaseSummary() {</span>
+<span class="fc" id="L12">        this.unavailable = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L13">        this.totalPrice = 0;</span>
+<span class="fc" id="L14">    }</span>
+
+    public void addUnavailable(Book book, int unavailableQty){
+<span class="fc" id="L17">        this.unavailable.put(book, unavailableQty);</span>
+<span class="fc" id="L18">    }</span>
+
+    public void addToTotalPrice(int valueToAdd) {
+<span class="fc" id="L21">        totalPrice += valueToAdd;</span>
+<span class="fc" id="L22">    }</span>
+
+    public int getTotalPrice() {
+<span class="fc" id="L25">        return totalPrice;</span>
+    }
+
+    public Map&lt;Book, Integer&gt; getUnavailable() {
+<span class="fc" id="L29">        return Collections.unmodifiableMap(unavailable);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
