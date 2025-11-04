@@ -5,7 +5,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,8 +20,8 @@ jobs:
           cache: maven
 
       - name: Run Checkstyle
+        working-directory: Assignment5_Code
         run: mvn -B checkstyle:checkstyle
-
 
       - name: Upload Checkstyle Report
         uses: actions/upload-artifact@v4
@@ -29,7 +29,8 @@ jobs:
           name: checkstyle-report
           path: Assignment5_Code/target/checkstyle-result.xml
 
-      - name: Run Tests & Generate JaCoCo Report
+
+      - name: Run Tests & JaCoCo
         working-directory: Assignment5_Code
         run: mvn -B verify
 
